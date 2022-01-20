@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsPeerPlace
 {
-    partial class Form1
+    partial class FormPeer
     {
         /// <summary>
         ///  Required designer variable.
@@ -46,14 +46,14 @@
             this.txtBoxPassword.Size = new System.Drawing.Size(100, 23);
             this.txtBoxPassword.TabIndex = 1;
             // 
-            // Form1
+            // FormPeer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.txtBoxPassword);
             this.Controls.Add(this.txtBoxUsername);
-            this.Name = "Form1";
+            this.Name = "FormPeer";
             this.Text = "Peer Place";
             this.ResumeLayout(false);
             this.PerformLayout();

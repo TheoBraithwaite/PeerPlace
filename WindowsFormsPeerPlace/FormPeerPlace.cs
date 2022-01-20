@@ -1,8 +1,8 @@
 namespace WindowsFormsPeerPlace
 {
-    public partial class Form1 : Form
+    public partial class FormPeer : Form
     {
-        public Form1()
+        public FormPeer()
         {
             InitializeComponent();
         }
