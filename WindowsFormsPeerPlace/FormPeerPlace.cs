@@ -52,5 +52,12 @@ namespace WindowsFormsPeerPlace
         {
             Application.Exit();
         }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Main console = new Main();
+            console.Show();
+        }
     }
 }
