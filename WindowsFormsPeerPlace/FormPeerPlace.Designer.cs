@@ -42,6 +42,7 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnRegister = new System.Windows.Forms.Button();
             this.buttonEncrypt = new System.Windows.Forms.Button();
+            this.labelMessage = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtBoxUsername
@@ -162,7 +163,7 @@
             // 
             // buttonEncrypt
             // 
-            this.buttonEncrypt.Location = new System.Drawing.Point(412, 104);
+            this.buttonEncrypt.Location = new System.Drawing.Point(452, 12);
             this.buttonEncrypt.Name = "buttonEncrypt";
             this.buttonEncrypt.Size = new System.Drawing.Size(78, 24);
             this.buttonEncrypt.TabIndex = 13;
@@ -170,11 +171,22 @@
             this.buttonEncrypt.UseVisualStyleBackColor = true;
             this.buttonEncrypt.Click += new System.EventHandler(this.buttonEncrypt_Click);
             // 
+            // labelMessage
+            // 
+            this.labelMessage.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelMessage.Location = new System.Drawing.Point(357, 77);
+            this.labelMessage.Name = "labelMessage";
+            this.labelMessage.Size = new System.Drawing.Size(164, 111);
+            this.labelMessage.TabIndex = 14;
+            this.labelMessage.Text = "Notification label";
+            // 
             // FormPeer
             // 
+            this.AcceptButton = this.btnLogin;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(542, 264);
+            this.Controls.Add(this.labelMessage);
             this.Controls.Add(this.buttonEncrypt);
             this.Controls.Add(this.btnRegister);
             this.Controls.Add(this.btnLogin);
@@ -192,6 +204,7 @@
             this.Name = "FormPeer";
             this.Text = "Peer Place";
             this.Load += new System.EventHandler(this.FormPeer_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormPeer_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,5 +226,6 @@
         private Button btnLogin;
         private Button btnRegister;
         private Button buttonEncrypt;
+        private Label labelMessage;
     }
 }

@@ -43,6 +43,8 @@ namespace WindowsFormsPeerPlace
 
         private void FormPeer_Load(object sender, EventArgs e)
         {
+            labelMessage.Visible = false;
+
             //Hide the password entered into the two password textboxes with aesterisks.
             txtBoxPassword.PasswordChar = '*';
             txtBoxReenterPwd.PasswordChar = '*';
@@ -51,6 +53,7 @@ namespace WindowsFormsPeerPlace
             LblExistingAccount.Visible = false; //Show "Don't have an account?" label.
             btnExistingLogin.Visible = false;
             btnRegister.Visible = false;
+            buttonEncrypt.Visible = false;
 
             LblReenterPassword.Visible = false;
             txtBoxReenterPwd.Visible = false;
@@ -145,8 +148,6 @@ namespace WindowsFormsPeerPlace
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            this.Hide();
-
             //FOR each user in the userList
             for (int i = 0; i < userList.Count; i++)
             {
@@ -154,7 +155,8 @@ namespace WindowsFormsPeerPlace
                 //AND the current passwordList item matches the password entered into the textbox
                 if (userList[i] == txtBoxUsername.Text && passwordList[i] == txtBoxPassword.Text)
                 {
-                    //THEN show the main console
+                    //THEN hide the current window and show the main console
+                    this.Hide();
                     console.Show();
                 }
                 else
@@ -164,8 +166,12 @@ namespace WindowsFormsPeerPlace
                     //If j equals the userList count of items THEN
                     if (j == userList.Count)
                     {
-                        //Display incorrect password.
-                        MessageBox.Show("Wrong username or password.");
+                        //Display login error.
+                        labelMessage.Visible = true;
+                        labelMessage.Text = "Incorrect username or password.";
+                        //System.Threading.Thread.Sleep(1000);
+                        //labelMessage.Hide();
+                        //MessageBox.Show("Wrong username or password.");
                         return;
                     }
                 }
@@ -179,6 +185,9 @@ namespace WindowsFormsPeerPlace
 
             password = EncryptDecrypt(password, 200);
 
+            userList.Add(username);
+            passwordList.Add(password);
+            
             string saveLocation = @"C:\Users\BEASTY-BOY\desktop\clientList.csv";
             File.AppendAllText(saveLocation,username + ',' + password + Environment.NewLine);
 
@@ -206,6 +215,14 @@ namespace WindowsFormsPeerPlace
             {
                 string saveLocation = @"C:\Users\BEASTY-BOY\desktop\clientList.csv";
                 File.AppendAllText(saveLocation, userList[i] + ',' + passwordList[i] + Environment.NewLine);
+            }
+        }
+
+        private void FormPeer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnLogin.PerformClick();
             }
         }
     }
