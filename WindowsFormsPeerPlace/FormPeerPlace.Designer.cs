@@ -41,6 +41,7 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnRegister = new System.Windows.Forms.Button();
+            this.buttonEncrypt = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtBoxUsername
@@ -159,11 +160,22 @@
             this.btnRegister.UseVisualStyleBackColor = true;
             this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
             // 
+            // buttonEncrypt
+            // 
+            this.buttonEncrypt.Location = new System.Drawing.Point(412, 104);
+            this.buttonEncrypt.Name = "buttonEncrypt";
+            this.buttonEncrypt.Size = new System.Drawing.Size(78, 24);
+            this.buttonEncrypt.TabIndex = 13;
+            this.buttonEncrypt.Text = "Encrypt All";
+            this.buttonEncrypt.UseVisualStyleBackColor = true;
+            this.buttonEncrypt.Click += new System.EventHandler(this.buttonEncrypt_Click);
+            // 
             // FormPeer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(542, 264);
+            this.Controls.Add(this.buttonEncrypt);
             this.Controls.Add(this.btnRegister);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.btnExit);
@@ -200,5 +212,6 @@
         private Button btnExit;
         private Button btnLogin;
         private Button btnRegister;
+        private Button buttonEncrypt;
     }
 }
