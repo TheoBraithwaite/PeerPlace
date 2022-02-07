@@ -25,7 +25,7 @@ namespace WindowsFormsPeerPlace
             InitializeComponent();
         }
 
-#region EncryptMethods
+#region EncryptMethod
         public string EncryptDecrypt(string szPlainText, int szEncryptionKey)
         {
             StringBuilder szInputStringBuild = new StringBuilder(szPlainText);
@@ -46,8 +46,9 @@ namespace WindowsFormsPeerPlace
             labelMessage.Visible = false;
 
             //Hide the password entered into the two password textboxes with aesterisks.
-            txtBoxPassword.PasswordChar = '*';
-            txtBoxReenterPwd.PasswordChar = '*';
+            char c = '\u25cf';
+            txtBoxReenterPwd.PasswordChar = c;
+            txtBoxPassword.PasswordChar = c;
 
             //On form load, assume user already has an account.
             LblExistingAccount.Visible = false; //Show "Don't have an account?" label.
@@ -58,54 +59,53 @@ namespace WindowsFormsPeerPlace
             LblReenterPassword.Visible = false;
             txtBoxReenterPwd.Visible = false;
 
-            string openLocation = @"C:\Users\BEASTY-BOY\desktop\clientList.csv";
-            string username;
-            string password;
-            string currentUser = txtBoxUsername.Text;
-            string currentPassword = txtBoxPassword.Text;
-            StreamReader reader = new StreamReader(openLocation);
-            string line = "";
-            string[] csvArray;
-
-
-            reader = File.OpenText(openLocation);
-            while (!reader.EndOfStream)
+            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\clientList.csv";
+            using var reader = new StreamReader(openLocation);
             {
-                try
+                string username;
+                string password;
+                string currentUser = txtBoxUsername.Text;
+                string currentPassword = txtBoxPassword.Text;
+                string line = "";
+                string[] csvArray;
+
+                while (!reader.EndOfStream)
                 {
-                    //Read a line from the file
-                    line = reader.ReadLine();
-                    //Split the clients in the line using an array
-                    csvArray = line.Split(',');
-                    //Check if the array has the correct number of elements
-                    if (csvArray.Length == 2)
+                    try
                     {
+                        //Read a line from the file
+                        line = reader.ReadLine();
+                        //Split the clients in the line using an array
+                        csvArray = line.Split(',');
+                        //Check if the array has the correct number of elements
+                        if (csvArray.Length == 2)
+                        {
 
-                        //Extract the data into separate variables
-                        username = csvArray[0];
-                        password = csvArray[1];
+                            //Extract the data into separate variables
+                            username = csvArray[0];
+                            password = csvArray[1];
 
-                        //Add clients to list.
-                        userList.Add(username);
+                            //Add clients to list.
+                            userList.Add(username);
 
-                        //Decrypts the password.
-                        password = EncryptDecrypt(password, 200);
+                            //Encrypts the password.
+                            password = EncryptDecrypt(password, 200);
 
-                        //Add password to list.
-                        passwordList.Add(password);
+                            //Add password to list.
+                            passwordList.Add(password);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error logging in");
+                        }
                     }
-                    else
+                    catch
                     {
-                        MessageBox.Show("Error logging in");
+                        MessageBox.Show("Fatal error");
                     }
                 }
-                catch
-                {
-                    MessageBox.Show("Fatal error");
-                }
+                MessageBox.Show("Completed.");
             }
-            Console.WriteLine("Completed.");
-            reader.Close();
         }
 
         private void btnCreateAccount_Click(object sender, EventArgs e)
@@ -180,27 +180,24 @@ namespace WindowsFormsPeerPlace
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            string username = txtBoxUsername.Text;
-            string password = txtBoxPassword.Text;
+            string saveLocation = @"C:\Users\BEASTY-BOY\Desktop\clientList.csv";
 
-            password = EncryptDecrypt(password, 200);
+            string username = txtBoxUsername.Text;
+            string password = EncryptDecrypt(txtBoxPassword.Text, 200);
 
             userList.Add(username);
             passwordList.Add(password);
-            
-            string saveLocation = @"C:\Users\BEASTY-BOY\desktop\clientList.csv";
-            File.AppendAllText(saveLocation,username + ',' + password + Environment.NewLine);
+
+            using var writer = File.AppendText(saveLocation);
+            {
+                writer.WriteLine();
+                writer.WriteLine(username + ',' + password);
 
 
-            //Create a writer and open the file
-            //TextWriter tw = new StreamWriter (saveLocation);
-            //Write the username and password to a file.
-            
-            //tw.Write(username + ',');
-            //tw.WriteLine(password);
-            //Close the stream.
-            //tw.Close();
-            MessageBox.Show("Saved to " + saveLocation);
+                string currentUser = txtBoxUsername.Text;
+                string currentPassword = txtBoxPassword.Text;
+            }
+                MessageBox.Show("Saved to " + saveLocation);
         }
 
         /// <summary>
