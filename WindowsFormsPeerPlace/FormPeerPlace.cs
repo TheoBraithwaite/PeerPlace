@@ -19,7 +19,12 @@ namespace WindowsFormsPeerPlace
         List<string> passwordList = new List<string>();
         Main console = new Main();
         int j = 0;
-        bool incorrectPassword = false;
+
+        //Error strings
+        string errorPassword = "Incorrect username or password.";
+        string errorRegister = "Password fields do not match.";
+        string errorFile = "Error with login file.";
+        string errorCrash = "";
 
         public FormPeer()
         {
@@ -44,16 +49,13 @@ namespace WindowsFormsPeerPlace
 
 #region LoginMethods
 
-        public void LabelMethod (bool incorrectPassword)
+        public void LabelMethod (string error)
         {
-            if (incorrectPassword == true)
-            {
-                tmrLabel.Stop();
-                //Display login error.
-                labelMessage.Visible = true;
-                tmrLabel.Start();
-                labelMessage.Text = "Incorrect username or password.";
-            }
+            //Display login error.
+            labelMessage.Visible = true;
+            //Restart the timer
+            tmrLabel.Start();
+            labelMessage.Text = error;
         }
 
 #endregion
@@ -104,15 +106,12 @@ namespace WindowsFormsPeerPlace
                             //Add clients to list.
                             userList.Add(username);
 
-                            //Encrypts the password.
-                            password = EncryptDecrypt(password, 200);
-
                             //Add password to list.
                             passwordList.Add(password);
                         }
                         else
                         {
-                            MessageBox.Show("Error logging in");
+                            LabelMethod(errorFile);
                         }
                     }
                     catch
@@ -138,8 +137,6 @@ namespace WindowsFormsPeerPlace
             //Show controls to repeat password.
             LblReenterPassword.Visible = true;
             txtBoxReenterPwd.Visible = true;
-
-
         }
 
         private void btnExistingLogin_Click(object sender, EventArgs e)
@@ -168,8 +165,8 @@ namespace WindowsFormsPeerPlace
             for (int i = 0; i < userList.Count; i++)
             {
                 //IF the current userList item matches the username entered into the textbox
-                //AND the current passwordList item matches the password entered into the textbox
-                if (userList[i] == txtBoxUsername.Text && passwordList[i] == txtBoxPassword.Text)
+                //AND the current passwordList item (being decrypted at this point) matches the password entered into the textbox
+                if (userList[i] == txtBoxUsername.Text && EncryptDecrypt(passwordList[i], 200) == txtBoxPassword.Text)
                 {
                     //THEN hide the current window and show the main console
                     this.Hide();
@@ -182,9 +179,10 @@ namespace WindowsFormsPeerPlace
                     //If j equals the userList count of items THEN
                     if (j == userList.Count)
                     {
-                        LabelMethod(incorrectPassword = true);
-                        j = 0;
-                        return;
+                        //Show the error message with the label method
+                        LabelMethod(errorPassword);
+                        //Reset j to 0 and return.
+                        j = 0;              
                     }
                 }
             }
@@ -217,8 +215,7 @@ namespace WindowsFormsPeerPlace
             }
             else
             {
-                labelMessage.Visible = true;
-                labelMessage.Text = "Password fields do not match.";
+                LabelMethod(errorRegister);
             }
         }
 
@@ -247,6 +244,7 @@ namespace WindowsFormsPeerPlace
 
         private void tmrLabel_Tick(object sender, EventArgs e)
         {
+            //After the timer interval, hide the label and stop the timer.
             labelMessage.Visible = false;
             tmrLabel.Stop();
         }
