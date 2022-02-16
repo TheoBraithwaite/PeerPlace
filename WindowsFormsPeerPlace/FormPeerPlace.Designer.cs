@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.txtBoxUsername = new System.Windows.Forms.TextBox();
             this.txtBoxPassword = new System.Windows.Forms.TextBox();
             this.LabelUsername = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@
             this.btnRegister = new System.Windows.Forms.Button();
             this.buttonEncrypt = new System.Windows.Forms.Button();
             this.labelMessage = new System.Windows.Forms.Label();
+            this.tmrLabel = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // txtBoxUsername
@@ -180,6 +182,11 @@
             this.labelMessage.TabIndex = 14;
             this.labelMessage.Text = "Notification label";
             // 
+            // tmrLabel
+            // 
+            this.tmrLabel.Interval = 5000;
+            this.tmrLabel.Tick += new System.EventHandler(this.tmrLabel_Tick);
+            // 
             // FormPeer
             // 
             this.AcceptButton = this.btnLogin;
@@ -227,5 +234,6 @@
         private Button btnRegister;
         private Button buttonEncrypt;
         private Label labelMessage;
+        private System.Windows.Forms.Timer tmrLabel;
     }
 }

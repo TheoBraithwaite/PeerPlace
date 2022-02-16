@@ -19,6 +19,7 @@ namespace WindowsFormsPeerPlace
         List<string> passwordList = new List<string>();
         Main console = new Main();
         int j = 0;
+        bool incorrectPassword = false;
 
         public FormPeer()
         {
@@ -39,8 +40,23 @@ namespace WindowsFormsPeerPlace
             }
             return szOutStringBuild.ToString();
         }
-#endregion
+        #endregion
 
+#region LoginMethods
+
+        public void LabelMethod (bool incorrectPassword)
+        {
+            if (incorrectPassword == true)
+            {
+                tmrLabel.Stop();
+                //Display login error.
+                labelMessage.Visible = true;
+                tmrLabel.Start();
+                labelMessage.Text = "Incorrect username or password.";
+            }
+        }
+
+#endregion
         private void FormPeer_Load(object sender, EventArgs e)
         {
             labelMessage.Visible = false;
@@ -166,12 +182,8 @@ namespace WindowsFormsPeerPlace
                     //If j equals the userList count of items THEN
                     if (j == userList.Count)
                     {
-                        //Display login error.
-                        labelMessage.Visible = true;
-                        labelMessage.Text = "Incorrect username or password.";
-                        //System.Threading.Thread.Sleep(1000);
-                        //labelMessage.Hide();
-                        //MessageBox.Show("Wrong username or password.");
+                        LabelMethod(incorrectPassword = true);
+                        j = 0;
                         return;
                     }
                 }
@@ -182,22 +194,32 @@ namespace WindowsFormsPeerPlace
         {
             string saveLocation = @"C:\Users\BEASTY-BOY\Desktop\clientList.csv";
 
-            string username = txtBoxUsername.Text;
-            string password = EncryptDecrypt(txtBoxPassword.Text, 200);
-
-            userList.Add(username);
-            passwordList.Add(password);
-
-            using var writer = File.AppendText(saveLocation);
+            //IF both passwords match in the two fields
+            if (txtBoxPassword.Text == txtBoxReenterPwd.Text)
             {
-                writer.WriteLine();
-                writer.WriteLine(username + ',' + password);
+                string username = txtBoxUsername.Text;
+                string password = EncryptDecrypt(txtBoxPassword.Text, 200);
+
+                userList.Add(username);
+                passwordList.Add(password);
 
 
-                string currentUser = txtBoxUsername.Text;
-                string currentPassword = txtBoxPassword.Text;
-            }
+                using var writer = File.AppendText(saveLocation);
+                {
+                    writer.WriteLine();
+                    writer.WriteLine(username + ',' + password);
+
+
+                    string currentUser = txtBoxUsername.Text;
+                    string currentPassword = txtBoxPassword.Text;
+                }
                 MessageBox.Show("Saved to " + saveLocation);
+            }
+            else
+            {
+                labelMessage.Visible = true;
+                labelMessage.Text = "Password fields do not match.";
+            }
         }
 
         /// <summary>
@@ -221,6 +243,12 @@ namespace WindowsFormsPeerPlace
             {
                 btnLogin.PerformClick();
             }
+        }
+
+        private void tmrLabel_Tick(object sender, EventArgs e)
+        {
+            labelMessage.Visible = false;
+            tmrLabel.Stop();
         }
     }
 }
