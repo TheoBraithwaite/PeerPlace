@@ -11,35 +11,50 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsPeerPlace
-{ 
+{
     public partial class FormPeer : Form
     {
         bool newAccount = false;
         List<string> userList = new List<string>();
         List<string> passwordList = new List<string>();
+
+        //The password key to be used in the Encrypt/Decrypt method
+        int passKey = 200;
+
         Main console = new Main();
         int j = 0;
 
         //Error strings
         string errorPassword = "Incorrect username or password.";
-        string errorRegister = "Password fields do not match.";
+        string errorUser = "A user already exists with that username.";
+        string errorMatch = "Password fields do not match, or a password field is empty.";
         string errorFile = "Error with login file.";
-        string errorCrash = "";
+        string errorCrash = "Fatal error";
 
         public FormPeer()
         {
             InitializeComponent();
         }
 
-#region EncryptMethod
+        #region EncryptMethod
+        /// <summary>
+        /// This encryption/decryption method works in binary.
+        /// It gets the password in binary, the encryption in binary and uses the XOR technique to encrypt/decrypt the password.
+        /// </summary>
+        /// <param name="szPlainText"></param>
+        /// <param name="szEncryptionKey"></param>
+        /// <returns></returns>
         public string EncryptDecrypt(string szPlainText, int szEncryptionKey)
         {
             StringBuilder szInputStringBuild = new StringBuilder(szPlainText);
             StringBuilder szOutStringBuild = new StringBuilder(szPlainText.Length);
             char Textch;
+            //FOR each character in the password
             for (int iCount = 0; iCount < szPlainText.Length; iCount++)
             {
+                //Get the current text character
                 Textch = szInputStringBuild[iCount];
+                //
                 Textch = (char)(Textch ^ szEncryptionKey);
                 szOutStringBuild.Append(Textch);
             }
@@ -47,9 +62,9 @@ namespace WindowsFormsPeerPlace
         }
         #endregion
 
-#region LoginMethods
+        #region LoginMethods
 
-        public void LabelMethod (string error)
+        public void LabelMethod(string error)
         {
             //Display login error.
             labelMessage.Visible = true;
@@ -58,12 +73,12 @@ namespace WindowsFormsPeerPlace
             labelMessage.Text = error;
         }
 
-#endregion
+        #endregion
         private void FormPeer_Load(object sender, EventArgs e)
         {
             labelMessage.Visible = false;
 
-            //Hide the password entered into the two password textboxes with aesterisks.
+            //Hide the password entered into the two password textboxes with this aesterisk character.
             char c = '\u25cf';
             txtBoxReenterPwd.PasswordChar = c;
             txtBoxPassword.PasswordChar = c;
@@ -116,7 +131,7 @@ namespace WindowsFormsPeerPlace
                     }
                     catch
                     {
-                        MessageBox.Show("Fatal error");
+                        LabelMethod(errorCrash);
                     }
                 }
                 MessageBox.Show("Completed.");
@@ -182,7 +197,7 @@ namespace WindowsFormsPeerPlace
                         //Show the error message with the label method
                         LabelMethod(errorPassword);
                         //Reset j to 0 and return.
-                        j = 0;              
+                        j = 0;
                     }
                 }
             }
@@ -192,8 +207,18 @@ namespace WindowsFormsPeerPlace
         {
             string saveLocation = @"C:\Users\BEASTY-BOY\Desktop\clientList.csv";
 
-            //IF both passwords match in the two fields
-            if (txtBoxPassword.Text == txtBoxReenterPwd.Text)
+            //FOR each user in the userList
+            for (int i = 0; i < userList.Count; i++)
+            {
+                //IF the current userList item matches the username entered into the textbox
+                //AND the current passwordList item (being decrypted at this point) matches the password entered into the textbox
+                if (userList[i] == txtBoxUsername.Text)
+                {
+                    LabelMethod(errorUser);
+                    return;
+                }
+            }
+            if (txtBoxPassword.Text == txtBoxReenterPwd.Text && txtBoxPassword.Text != "")
             {
                 string username = txtBoxUsername.Text;
                 string password = EncryptDecrypt(txtBoxPassword.Text, 200);
@@ -215,7 +240,7 @@ namespace WindowsFormsPeerPlace
             }
             else
             {
-                LabelMethod(errorRegister);
+                LabelMethod(errorMatch);
             }
         }
 
