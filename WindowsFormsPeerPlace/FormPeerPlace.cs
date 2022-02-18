@@ -54,7 +54,8 @@ namespace WindowsFormsPeerPlace
             {
                 //Get the current text character
                 Textch = szInputStringBuild[iCount];
-                //
+                //Use XOR conditional operator for the current character with the encryption key.
+                //(Operates in binary)
                 Textch = (char)(Textch ^ szEncryptionKey);
                 szOutStringBuild.Append(Textch);
             }
@@ -64,6 +65,10 @@ namespace WindowsFormsPeerPlace
 
         #region LoginMethods
 
+        /// <summary>
+        /// Display appropriate error in the notification label on the form
+        /// </summary>
+        /// <param name="error">The variable "error" is the string error displayed to the user.</param>
         public void LabelMethod(string error)
         {
             //Display login error.
@@ -73,7 +78,50 @@ namespace WindowsFormsPeerPlace
             labelMessage.Text = error;
         }
 
+        public void LoginMethod(bool newLogin)
+        {
+            if (newLogin)
+            {
+                LblExistingAccount.Visible = true; //Show "Already have an account?"
+                btnExistingLogin.Visible = true; //Show "Login here" button.
+                btnRegister.Visible = true;
+
+                LblAccount.Visible = false;
+                btnCreateAccount.Visible = false;
+
+                //Show controls to repeat password.
+                LblReenterPassword.Visible = true;
+                txtBoxReenterPwd.Visible = true;
+
+                //Reset new account to false.
+                newAccount = false;
+            }
+            else
+            {
+                //User has an existing account. Swap label and buttons. Show option to create account.
+                LblExistingAccount.Visible = false; //Show "Don't have an account?" label.
+                btnExistingLogin.Visible = false; //Show "Create account here" button.
+
+                LblAccount.Visible = true;
+                btnCreateAccount.Visible = true;
+                btnRegister.Visible = false;
+
+                //Don't show repeat password controls.
+                LblReenterPassword.Visible = false;
+                txtBoxReenterPwd.Visible = false;
+            }    
+        }
+
         #endregion
+
+        /// <summary>
+        /// Upon loading the form, set the controls appropriately for a login action.
+        /// Then use the reader to open a file stored in openLocation.
+        /// Read the file, split and store it in a CSV array.
+        /// The notification label displays an appropriate error depending on the issue.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormPeer_Load(object sender, EventArgs e)
         {
             labelMessage.Visible = false;
@@ -142,31 +190,15 @@ namespace WindowsFormsPeerPlace
         {
             //User has no existing account. Swap label and buttons. Show option to login. Set newAccount to true.
             newAccount = true;
-            LblExistingAccount.Visible = true; //Show "Already have an account?"
-            btnExistingLogin.Visible = true; //Show "Login here" button.
-            btnRegister.Visible = true;
 
-            LblAccount.Visible = false;
-            btnCreateAccount.Visible = false;
-
-            //Show controls to repeat password.
-            LblReenterPassword.Visible = true;
-            txtBoxReenterPwd.Visible = true;
+            //Pass newAccount value to LoginMethod to create a new account.
+            LoginMethod(newAccount);
         }
 
         private void btnExistingLogin_Click(object sender, EventArgs e)
         {
-            //User has an existing account. Swap label and buttons. Show option to create account.
-            LblExistingAccount.Visible = false; //Show "Don't have an account?"
-            btnExistingLogin.Visible = false; //Show "Create account here" button.
-
-            LblAccount.Visible = true;
-            btnCreateAccount.Visible = true;
-            btnRegister.Visible = false;
-
-            //Show controls to repeat password.
-            LblReenterPassword.Visible = false;
-            txtBoxReenterPwd.Visible = false;
+            //Pass newAccount value to LoginMethod to hide and show appropriate controls.
+            LoginMethod(newAccount);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -181,7 +213,7 @@ namespace WindowsFormsPeerPlace
             {
                 //IF the current userList item matches the username entered into the textbox
                 //AND the current passwordList item (being decrypted at this point) matches the password entered into the textbox
-                if (userList[i] == txtBoxUsername.Text && EncryptDecrypt(passwordList[i], 200) == txtBoxPassword.Text)
+                if (userList[i] == txtBoxUsername.Text && EncryptDecrypt(passwordList[i], passKey) == txtBoxPassword.Text)
                 {
                     //THEN hide the current window and show the main console
                     this.Hide();
@@ -221,7 +253,7 @@ namespace WindowsFormsPeerPlace
             if (txtBoxPassword.Text == txtBoxReenterPwd.Text && txtBoxPassword.Text != "")
             {
                 string username = txtBoxUsername.Text;
-                string password = EncryptDecrypt(txtBoxPassword.Text, 200);
+                string password = EncryptDecrypt(txtBoxPassword.Text, passKey);
 
                 userList.Add(username);
                 passwordList.Add(password);
@@ -259,6 +291,11 @@ namespace WindowsFormsPeerPlace
             }
         }
 
+        /// <summary>
+        /// This KeyDown method performs the same action as a mouse click on the button in focus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormPeer_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -267,6 +304,11 @@ namespace WindowsFormsPeerPlace
             }
         }
 
+        /// <summary>
+        /// After showing the notification label for a pre-determined amount of time, this method hides labelMessage and stops the timer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tmrLabel_Tick(object sender, EventArgs e)
         {
             //After the timer interval, hide the label and stop the timer.
