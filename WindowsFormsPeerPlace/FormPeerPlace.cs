@@ -140,7 +140,7 @@ namespace WindowsFormsPeerPlace
             LblReenterPassword.Visible = false;
             txtBoxReenterPwd.Visible = false;
 
-            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\clientList.csv";
+            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\PeerPlace\clientList.csv";
             using var reader = new StreamReader(openLocation);
             {
                 string username;
@@ -237,7 +237,7 @@ namespace WindowsFormsPeerPlace
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            string saveLocation = @"C:\Users\BEASTY-BOY\Desktop\clientList.csv";
+            string saveLocation = @"C:\Users\BEASTY-BOY\Desktop\PeerPlace\clientList.csv";
 
             //FOR each user in the userList
             for (int i = 0; i < userList.Count; i++)
@@ -286,7 +286,7 @@ namespace WindowsFormsPeerPlace
             //FOR each user in the userList
             for (int i = 0; i < userList.Count; i++)
             {
-                string saveLocation = @"C:\Users\BEASTY-BOY\desktop\clientList.csv";
+                string saveLocation = @"C:\Users\BEASTY-BOY\desktop\PeerPlace\clientList.csv";
                 File.AppendAllText(saveLocation, userList[i] + ',' + passwordList[i] + Environment.NewLine);
             }
         }

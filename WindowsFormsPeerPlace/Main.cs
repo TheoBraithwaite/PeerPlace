@@ -14,6 +14,7 @@ namespace WindowsFormsPeerPlace
 {
     public partial class Main : Form
     {
+        DataTable employeeTable = new DataTable();
 
         List<int> idList = new List<int>();
         List<string> firstNameList = new List<string>();
@@ -23,6 +24,9 @@ namespace WindowsFormsPeerPlace
         List<string> genderList = new List<string>();
         List<string> addressList = new List<string>();
 
+        //comboBox selected type
+        int typeValue = 0;
+
         public Main()
         {
             InitializeComponent();
@@ -30,9 +34,13 @@ namespace WindowsFormsPeerPlace
 
         private void Main_Load(object sender, EventArgs e)
         {
-
             string line = "";
             string[] csvArray;
+
+            comboBoxSearch.Items.AddRange(new string[] {"ID", "First Name", "Last Name", "Email", "Employee ID", "Gender"});
+            comboBoxSearch.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            typeValue = comboBoxSearch.SelectedIndex = 0;
 
             //employeeGrid.Columns.Add("Index", "Index");
             //employeeGrid.Columns.Add("Value", "Dice Value");
@@ -43,7 +51,7 @@ namespace WindowsFormsPeerPlace
             //employeeGrid.Rows.Add(new object[] { i + 1, theData[i] });
             //}
 
-            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\employeeList.csv";
+            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\PeerPlace\employeeList.csv";
             using var reader = new StreamReader(openLocation);
             {
                 int id;
@@ -99,17 +107,47 @@ namespace WindowsFormsPeerPlace
                 }
                 MessageBox.Show("Completed.");
 
-                employeeGrid.Columns.Add("Index", "ID");
-                employeeGrid.Columns.Add("Value", "First Name");
-                employeeGrid.Columns.Add("Value", "Last Name");
-                employeeGrid.Columns.Add("Value", "Email");
-                employeeGrid.Columns.Add("Value", "Employee ID");
-                employeeGrid.Columns.Add("Value", "Gender");
+                employeeTable.Columns.Add("ID", typeof(int));
+                employeeTable.Columns.Add("First Name", typeof(string));
+                employeeTable.Columns.Add("Last Name", typeof(string));
+                employeeTable.Columns.Add("Email", typeof(string));
+                employeeTable.Columns.Add("Employee ID", typeof(int)) ;
+                employeeTable.Columns.Add("Gender", typeof(string));
 
                 for (int i = 0; i < idList.Count; i++)
                 {
-                    employeeGrid.Rows.Add(new object[] { i + 1, firstNameList[i], lastNameList[i], emailList[i], numberList[i], genderList[i]});
+                    employeeTable.Rows.Add(new object[] { i + 1, firstNameList[i], lastNameList[i], emailList[i], numberList[i], genderList[i] });
                 }
+
+                employeeGrid.DataSource = employeeTable;
+            }
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void textBoxSearch_TextChanged(object sender, EventArgs e)
+        {
+            string searchValue = textBoxSearch.Text;
+            typeValue = comboBoxSearch.SelectedIndex;
+
+            try
+            {
+                var re = from row in employeeTable.AsEnumerable()
+                            where row[typeValue].ToString().Contains(searchValue)
+                            select row;
+
+                int results = re.Count();
+                labelResults.Text = "Results found: " + results;
+
+                employeeGrid.DataSource = re.CopyToDataTable();
+            }
+            catch (Exception ex)
+            {
+                labelResults.Text = ex.Message;
+                return;
             }
         }
     }
