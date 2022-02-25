@@ -16,6 +16,9 @@ namespace WindowsFormsPeerPlace
     {
         DataTable employeeTable = new DataTable();
 
+        static string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string saveOpenEmployees = Path.Combine(path + "\\PeerPlace\\employeeList.csv");
+
         List<int> idList = new List<int>();
         List<string> firstNameList = new List<string>();
         List<string> lastNameList = new List<string>();
@@ -32,6 +35,14 @@ namespace WindowsFormsPeerPlace
             InitializeComponent();
         }
 
+        /// <summary>
+        /// When loading the management console, the method:
+        /// ⬤ Adds the required range to the comboBox
+        /// ⬤ Disables text input and sets the selected item to "ID"
+        /// ⬤ Loads in the file and displays it in the gridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
             string line = "";
@@ -42,17 +53,7 @@ namespace WindowsFormsPeerPlace
 
             typeValue = comboBoxSearch.SelectedIndex = 0;
 
-            //employeeGrid.Columns.Add("Index", "Index");
-            //employeeGrid.Columns.Add("Value", "Dice Value");
-            //int[] theData = new int[] { 5, 2, 1, 5, 4, 1, 3, 1 };
-
-            //for (int i = 0; i < theData.Length; i++)
-            //{
-            //employeeGrid.Rows.Add(new object[] { i + 1, theData[i] });
-            //}
-
-            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\PeerPlace\employeeList.csv";
-            using var reader = new StreamReader(openLocation);
+            using var reader = new StreamReader(saveOpenEmployees);
             {
                 int id;
                 string firstName;
@@ -83,10 +84,10 @@ namespace WindowsFormsPeerPlace
                             gender = csvArray[5];
                             streetAddress = csvArray[6];
 
-                            //Add clients to list.
+                            //Add id to list.
                             idList.Add(id);
 
-                            //Add password to list.
+                            //Add succeeding fields to the list.
                             firstNameList.Add(firstName);
                             lastNameList.Add(lastName);
                             emailList.Add(email);
@@ -105,8 +106,6 @@ namespace WindowsFormsPeerPlace
                         MessageBox.Show("Fatal error.");
                     }
                 }
-                MessageBox.Show("Completed.");
-
                 employeeTable.Columns.Add("ID", typeof(int));
                 employeeTable.Columns.Add("First Name", typeof(string));
                 employeeTable.Columns.Add("Last Name", typeof(string));
@@ -123,11 +122,11 @@ namespace WindowsFormsPeerPlace
             }
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-            
-        }
-
+        /// <summary>
+        /// Each time the text input in the search box is changed, this event method fires.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
             string searchValue = textBoxSearch.Text;

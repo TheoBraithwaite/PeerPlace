@@ -208,6 +208,8 @@
             this.Controls.Add(this.btnExistingLogin);
             this.Controls.Add(this.btnCreateAccount);
             this.Controls.Add(this.LblAccount);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "FormPeer";
             this.Text = "Peer Place";
             this.Load += new System.EventHandler(this.FormPeer_Load);

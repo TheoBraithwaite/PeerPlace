@@ -36,7 +36,6 @@
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.comboBoxSearch = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.buttonSearch = new System.Windows.Forms.Button();
             this.labelResults = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.employeeGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -116,16 +115,6 @@
             this.label3.Text = "for";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // buttonSearch
-            // 
-            this.buttonSearch.Location = new System.Drawing.Point(842, 61);
-            this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
-            this.buttonSearch.TabIndex = 7;
-            this.buttonSearch.Text = "Search";
-            this.buttonSearch.UseVisualStyleBackColor = true;
-            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
-            // 
             // labelResults
             // 
             this.labelResults.AutoSize = true;
@@ -143,7 +132,6 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(929, 571);
             this.Controls.Add(this.labelResults);
-            this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBoxSearch);
             this.Controls.Add(this.textBoxSearch);
@@ -151,7 +139,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.employeeGrid);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "Main";
             this.Text = "PeerPlace - Management Console";
             this.Load += new System.EventHandler(this.Main_Load);

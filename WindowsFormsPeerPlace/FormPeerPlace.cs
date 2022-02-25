@@ -15,6 +15,11 @@ namespace WindowsFormsPeerPlace
     public partial class FormPeer : Form
     {
         bool newAccount = false;
+
+        //Path variables
+        static string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string saveOpenLocation = Path.Combine(path + "\\PeerPlace\\clientList.csv");
+
         List<string> userList = new List<string>();
         List<string> passwordList = new List<string>();
 
@@ -23,6 +28,9 @@ namespace WindowsFormsPeerPlace
 
         Main console = new Main();
         int j = 0;
+
+        //Message strings
+        string welcomeMessage = "Welcome! Please enter your credentials.";
 
         //Error strings
         string errorPassword = "Incorrect username or password.";
@@ -140,8 +148,7 @@ namespace WindowsFormsPeerPlace
             LblReenterPassword.Visible = false;
             txtBoxReenterPwd.Visible = false;
 
-            string openLocation = @"C:\Users\BEASTY-BOY\Desktop\PeerPlace\clientList.csv";
-            using var reader = new StreamReader(openLocation);
+            using var reader = new StreamReader(saveOpenLocation);
             {
                 string username;
                 string password;
@@ -182,7 +189,7 @@ namespace WindowsFormsPeerPlace
                         LabelMethod(errorCrash);
                     }
                 }
-                MessageBox.Show("Completed.");
+                LabelMethod(welcomeMessage);
             }
         }
 
@@ -237,8 +244,6 @@ namespace WindowsFormsPeerPlace
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            string saveLocation = @"C:\Users\BEASTY-BOY\Desktop\PeerPlace\clientList.csv";
-
             //FOR each user in the userList
             for (int i = 0; i < userList.Count; i++)
             {
@@ -259,7 +264,7 @@ namespace WindowsFormsPeerPlace
                 passwordList.Add(password);
 
 
-                using var writer = File.AppendText(saveLocation);
+                using var writer = File.AppendText(saveOpenLocation);
                 {
                     writer.WriteLine();
                     writer.WriteLine(username + ',' + password);
@@ -268,7 +273,7 @@ namespace WindowsFormsPeerPlace
                     string currentUser = txtBoxUsername.Text;
                     string currentPassword = txtBoxPassword.Text;
                 }
-                MessageBox.Show("Saved to " + saveLocation);
+                MessageBox.Show("Saved to " + saveOpenLocation);
             }
             else
             {
@@ -286,8 +291,8 @@ namespace WindowsFormsPeerPlace
             //FOR each user in the userList
             for (int i = 0; i < userList.Count; i++)
             {
-                string saveLocation = @"C:\Users\BEASTY-BOY\desktop\PeerPlace\clientList.csv";
-                File.AppendAllText(saveLocation, userList[i] + ',' + passwordList[i] + Environment.NewLine);
+                //string saveLocation = @"C:\Users\BEASTY-BOY\desktop\PeerPlace\clientList.csv";
+                File.AppendAllText(saveOpenLocation, userList[i] + ',' + passwordList[i] + Environment.NewLine);
             }
         }
 
