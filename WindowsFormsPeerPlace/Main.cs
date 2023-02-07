@@ -17,7 +17,7 @@ namespace WindowsFormsPeerPlace
         DataTable employeeTable = new DataTable();
 
         static string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string saveOpenEmployees = Path.Combine(path + "\\PeerPlace\\employeeList.csv");
+        string saveOpenEmployees = Path.Combine(path + "\\Desktop Misc\\PeerPlace\\employeeList.csv");
 
         List<int> idList = new List<int>();
         List<string> firstNameList = new List<string>();

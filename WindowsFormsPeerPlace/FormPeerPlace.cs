@@ -18,7 +18,7 @@ namespace WindowsFormsPeerPlace
 
         //Path variables
         static string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string saveOpenLocation = Path.Combine(path + "\\PeerPlace\\clientList.csv");
+        string saveOpenLocation = Path.Combine(path + "\\Desktop Misc\\PeerPlace\\clientList.csv");
 
         List<string> userList = new List<string>();
         List<string> passwordList = new List<string>();
