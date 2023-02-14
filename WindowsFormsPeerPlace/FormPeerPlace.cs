@@ -17,8 +17,8 @@ namespace WindowsFormsPeerPlace
         bool newAccount = false;
 
         //Path variables
-        static string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string saveOpenLocation = Path.Combine(path + "\\Desktop Misc\\PeerPlace\\clientList.csv");
+        static string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string saveOpenLocation = Path.Combine(path + "\\GitHub\\PeerPlace\\PeerPlace\\clientList.csv");
 
         List<string> userList = new List<string>();
         List<string> passwordList = new List<string>();
@@ -33,8 +33,11 @@ namespace WindowsFormsPeerPlace
         string welcomeMessage = "Welcome! Please enter your credentials.";
 
         //Error strings
-        string errorPassword = "Incorrect username or password.";
+        string errorPassword = "Incorrect username and/or password.";
         string errorUser = "A user already exists with that username.";
+        string errorNoUser = "A user does not exist with that username. Please register for an account using the button below.";
+        string errorEmptyUser = "Username field is empty. Please enter a username.";
+        string errorCharacter = "The character you're trying to enter is forbidden.";
         string errorMatch = "Password fields do not match, or a password field is empty.";
         string errorFile = "Error with login file.";
         string errorCrash = "Fatal error";
@@ -230,8 +233,14 @@ namespace WindowsFormsPeerPlace
                 {
                     //Else add 1 to j
                     j++;
-                    //If j equals the userList count of items THEN
-                    if (j == userList.Count)
+
+                    //If the username field is empty, THEN
+                    if (txtBoxUsername.Text == "")
+                    {
+                        //Show an error.
+                        LabelMethod(errorEmptyUser);
+                    }
+                    else
                     {
                         //Show the error message with the label method
                         LabelMethod(errorPassword);
@@ -277,7 +286,7 @@ namespace WindowsFormsPeerPlace
             }
             else
             {
-                LabelMethod(errorMatch);
+                LabelMethod(errorMatch); //Password does not match account error.
             }
         }
 
@@ -319,6 +328,15 @@ namespace WindowsFormsPeerPlace
             //After the timer interval, hide the label and stop the timer.
             labelMessage.Visible = false;
             tmrLabel.Stop();
+        }
+
+        private void txtBoxUsername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //IF the keypress matches a character blocked by the form, show the error in the label.
+            if (e.Handled = e.KeyChar != (char)Keys.Back && char.IsSeparator(e.KeyChar) && !char.IsLetter(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                LabelMethod(errorCharacter);
+            }    
         }
     }
 }
